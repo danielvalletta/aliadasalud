@@ -1,1 +1,7 @@
+Supabase conectividad
+
+psql -h db.raexbhxiikhwsetwzjhx.supabase.co -p 5432 -d postgres -U postgres
+Database Password: qasnaz-bynjoD-9fonro
+
+URI: postgresql://postgres:[YOUR_PASSWORD]@db.raexbhxiikhwsetwzjhx.supabase.co:5432/postgres
 
