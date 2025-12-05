@@ -1,0 +1,177 @@
+-- Esquema básico telemedicina – versión inicial
+
+-- Pacientes
+CREATE TABLE public.paciente (
+    id_paciente         bigserial PRIMARY KEY,
+    nombre              varchar(100) NOT NULL,
+    apellido            varchar(100) NOT NULL,
+    documento           varchar(30)  NOT NULL,
+    fecha_nac           date         NOT NULL,
+    email               varchar(255) NOT NULL,
+    telefono            varchar(50),
+    direccion           varchar(255),
+    id_obra_social      bigint,
+    id_plan             bigint,
+    nro_afiliado        varchar(50),
+    fecha_alta          timestamp with time zone DEFAULT now(),
+    estado              varchar(20) DEFAULT 'ACTIVO'
+);
+
+-- Médicos
+CREATE TABLE public.medico (
+    id_medico       bigserial PRIMARY KEY,
+    nombre          varchar(100) NOT NULL,
+    apellido        varchar(100) NOT NULL,
+    matricula       varchar(50)  NOT NULL,
+    especialidad    varchar(100) NOT NULL,
+    email           varchar(255) NOT NULL,
+    telefono        varchar(50),
+    estado          varchar(20) DEFAULT 'ACTIVO'
+);
+
+-- Obras sociales / seguros
+CREATE TABLE public.obra_social (
+    id_obra_social  bigserial PRIMARY KEY,
+    nombre          varchar(150) NOT NULL,
+    tipo            varchar(50),           -- prepaga, seguro, etc.
+    estado          varchar(20) DEFAULT 'ACTIVO'
+);
+
+-- Planes por obra social
+CREATE TABLE public.plan (
+    id_plan         bigserial PRIMARY KEY,
+    id_obra_social  bigint NOT NULL REFERENCES public.obra_social(id_obra_social),
+    nombre          varchar(150) NOT NULL,
+    descripcion     text,
+    estado          varchar(20) DEFAULT 'ACTIVO'
+);
+
+-- Prestaciones (tipos de acto médico)
+CREATE TABLE public.prestacion (
+    id_prestacion       bigserial PRIMARY KEY,
+    codigo              varchar(50)  NOT NULL,
+    descripcion         varchar(255) NOT NULL,
+    tipo                varchar(50),       -- teleconsulta, presencial, estudio, etc.
+    duracion_estimada   integer,           -- minutos
+    UNIQUE (codigo)
+);
+
+-- Agenda del médico (bloques horarios)
+CREATE TABLE public.agenda_medico (
+    id_agenda       bigserial PRIMARY KEY,
+    id_medico       bigint NOT NULL REFERENCES public.medico(id_medico),
+    fecha           date   NOT NULL,
+    hora_desde      time   NOT NULL,
+    hora_hasta      time   NOT NULL,
+    tipo_consulta   varchar(50) DEFAULT 'TELECONSULTA',
+    estado          varchar(20) DEFAULT 'ACTIVO'
+);
+
+-- Turnos
+CREATE TABLE public.turno (
+    id_turno        bigserial PRIMARY KEY,
+    id_paciente     bigint NOT NULL REFERENCES public.paciente(id_paciente),
+    id_medico       bigint NOT NULL REFERENCES public.medico(id_medico),
+    fecha_hora      timestamp with time zone NOT NULL,
+    id_plan         bigint REFERENCES public.plan(id_plan),
+    id_prestacion   bigint REFERENCES public.prestacion(id_prestacion),
+    enlace_sala     text,
+    estado          varchar(20) DEFAULT 'PENDIENTE',  -- PENDIENTE, CONFIRMADO, CANCELADO, COMPLETADO, AUSENTE
+    motivo_cancelacion text
+);
+
+-- Consultas (acto médico efectivo)
+CREATE TABLE public.consulta (
+    id_consulta         bigserial PRIMARY KEY,
+    id_turno            bigint NOT NULL REFERENCES public.turno(id_turno),
+    id_paciente         bigint NOT NULL REFERENCES public.paciente(id_paciente),
+    id_medico           bigint NOT NULL REFERENCES public.medico(id_medico),
+    fecha_hora_inicio   timestamp with time zone,
+    fecha_hora_fin      timestamp with time zone,
+    motivo              text,
+    diagnostico         text,
+    conducta            text,
+    estado              varchar(20) DEFAULT 'EN_CURSO'  -- EN_CURSO, CERRADA, CANCELADA
+);
+
+-- Receta
+CREATE TABLE public.receta (
+    id_receta       bigserial PRIMARY KEY,
+    id_consulta     bigint NOT NULL REFERENCES public.consulta(id_consulta),
+    fecha_emision   timestamp with time zone DEFAULT now(),
+    codigo_validacion varchar(100) NOT NULL,
+    estado          varchar(20) DEFAULT 'VIGENTE'  -- VIGENTE, VENCIDA, ANULADA
+);
+
+-- Detalle de receta
+CREATE TABLE public.receta_detalle (
+    id_receta_detalle   bigserial PRIMARY KEY,
+    id_receta           bigint NOT NULL REFERENCES public.receta(id_receta) ON DELETE CASCADE,
+    medicamento         varchar(255) NOT NULL,
+    dosis               varchar(100),
+    frecuencia          varchar(100),
+    duracion            varchar(100),
+    observaciones       text
+);
+
+-- Órdenes de estudios
+CREATE TABLE public.orden_estudio (
+    id_orden        bigserial PRIMARY KEY,
+    id_consulta     bigint NOT NULL REFERENCES public.consulta(id_consulta),
+    tipo_estudio    varchar(150) NOT NULL,
+    indicaciones    text,
+    prioridad       varchar(50),          -- NORMAL, URGENTE
+    estado          varchar(20) DEFAULT 'PENDIENTE'
+);
+
+-- Eventos de historia clínica (para auditoría/cronología)
+CREATE TABLE public.historia_clinica_evento (
+    id_evento       bigserial PRIMARY KEY,
+    id_paciente     bigint NOT NULL REFERENCES public.paciente(id_paciente),
+    tipo_evento     varchar(50) NOT NULL, -- CONSULTA, RECETA, ORDEN, NOTA
+    id_referencia   bigint,               -- id_consulta, id_receta, etc.
+    descripcion     text,
+    fecha_evento    timestamp with time zone DEFAULT now()
+);
+
+-- Prestación para facturación
+CREATE TABLE public.prestacion_facturacion (
+    id_facturacion      bigserial PRIMARY KEY,
+    id_consulta         bigint NOT NULL REFERENCES public.consulta(id_consulta),
+    id_paciente         bigint NOT NULL REFERENCES public.paciente(id_paciente),
+    id_plan             bigint REFERENCES public.plan(id_plan),
+    id_prestacion       bigint REFERENCES public.prestacion(id_prestacion),
+    monto               numeric(12,2) DEFAULT 0,
+    estado_facturacion  varchar(20) DEFAULT 'PENDIENTE', -- PENDIENTE, FACTURADA, PAGADA, RECHAZADA
+    fecha_registro      timestamp with time zone DEFAULT now()
+);
+
+-- Usuarios de aplicación (si no usás Auth de Supabase directamente)
+CREATE TABLE public.usuario (
+    id_usuario      bigserial PRIMARY KEY,
+    login           varchar(100) NOT NULL UNIQUE,
+    password_hash   varchar(255) NOT NULL,
+    rol             varchar(20)  NOT NULL,  -- PACIENTE, MEDICO, ADMIN, OPERADOR
+    id_paciente     bigint REFERENCES public.paciente(id_paciente),
+    id_medico       bigint REFERENCES public.medico(id_medico),
+    estado          varchar(20) DEFAULT 'ACTIVO'
+);
+
+-- Log de auditoría
+CREATE TABLE public.log_auditoria (
+    id_log          bigserial PRIMARY KEY,
+    id_usuario      bigint,
+    fecha_hora      timestamp with time zone DEFAULT now(),
+    accion          varchar(100) NOT NULL,
+    entidad         varchar(100),
+    id_entidad      bigint,
+    detalle         text
+);
+
+-- Índices útiles
+CREATE INDEX idx_paciente_documento ON public.paciente(documento);
+CREATE INDEX idx_medico_matricula   ON public.medico(matricula);
+CREATE INDEX idx_turno_fecha        ON public.turno(fecha_hora);
+CREATE INDEX idx_consulta_paciente  ON public.consulta(id_paciente);
+CREATE INDEX idx_consulta_medico    ON public.consulta(id_medico);
+
