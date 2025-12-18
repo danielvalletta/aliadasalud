@@ -1,0 +1,58 @@
+:host ::ng-deep {
+  --p-inputtext-background: #ffffff;
+  --p-inputtext-color: #333333;
+  --p-inputtext-placeholder-color: #9ca3af;
+  --p-inputtext-border-color: #d1d5db;
+}
+
+::ng-deep .p-inputtext {
+  background: #ffffff !important;
+  color: #333333 !important;
+}
+
+::ng-deep .p-inputtext::placeholder {
+  color: #9ca3af !important;
+}
+
+::ng-deep .p-inputtext:enabled:focus {
+  border-color: #FF781D !important;
+  box-shadow: 0 0 0 3px rgba(255, 120, 29, 0.1) !important;
+  outline: none !important;
+}
+
+::ng-deep .p-password input {
+  background: #ffffff !important;
+  color: #333333 !important;
+}
+
+::ng-deep .p-password input::placeholder {
+  color: #9ca3af !important;
+}
+
+::ng-deep .p-password input:enabled:focus {
+  border-color: #FF781D !important;
+  box-shadow: 0 0 0 3px rgba(255, 120, 29, 0.1) !important;
+  outline: none !important;
+}
+
+::ng-deep .p-checkbox .p-checkbox-box {
+  background: #ffffff !important;
+}
+
+::ng-deep .p-checkbox .p-checkbox-box.p-highlight {
+  background: #FF781D !important;
+  border-color: #FF781D !important;
+}
+
+::ng-deep .p-button {
+  background: linear-gradient(135deg, #FF781D 0%, #F2AC58 100%) !important;
+  border: none !important;
+}
+
+::ng-deep .p-button:enabled:hover {
+  opacity: 0.9;
+}
+
+::ng-deep .p-password-meter {
+  margin-top: 0.5rem;
+}
