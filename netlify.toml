@@ -1,7 +1,4 @@
 [build]
   base = "aliadasalud"
   command = "npm run build"
-  publish = "aliadasalud/dist/aliadasalud/browser"
-
-[[plugins]]
-  package = "@netlify/angular-runtime"
+  publish = "/dist/aliadasalud/browser"
