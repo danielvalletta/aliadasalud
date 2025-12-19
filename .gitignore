@@ -1,0 +1,23 @@
+# Claude Code settings (may contain tokens/secrets)
+.claude/settings.local.json
+
+# Node
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Build outputs
+dist/
+build/
+.angular/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
