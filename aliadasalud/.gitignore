@@ -45,5 +45,6 @@ Thumbs.db
 # Environment variables
 .env
 .env.local
-/src/environments/environment.ts
-/src/environments/environment.prod.ts
+# Note: Supabase anon keys are safe to commit (they're public, used in frontend)
+# /src/environments/environment.ts
+# /src/environments/environment.prod.ts
