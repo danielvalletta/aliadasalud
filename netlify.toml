@@ -2,6 +2,3 @@
   base = "aliadasalud"
   command = "npm run build"
   publish = "aliadasalud/dist/aliadasalud/browser"
-
-[[plugins]]
-  package = "@netlify/angular-runtime"
