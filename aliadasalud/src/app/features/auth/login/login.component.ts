@@ -55,7 +55,7 @@ export class LoginComponent {
       next: (response) => {
         this.loading.set(false);
         if (response.success) {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/profile/complete']);
         } else {
           this.errorMessage.set(response.error);
         }

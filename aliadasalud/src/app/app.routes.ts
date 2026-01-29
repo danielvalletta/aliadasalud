@@ -2,8 +2,10 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { CompleteProfileComponent } from './features/profile/complete-profile/complete-profile.component';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+import { profileCompleteGuard } from './core/guards/profile-complete.guard';
 
 export const routes: Routes = [
   {
@@ -22,9 +24,14 @@ export const routes: Routes = [
     canActivate: [guestGuard]
   },
   {
+    path: 'profile/complete',
+    component: CompleteProfileComponent,
+    canActivate: [authGuard]
+  },
+  {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard, profileCompleteGuard]
   },
   {
     path: '**',

@@ -5,3 +5,296 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ====================================
+   PRIMENG FORM COMPONENTS - GLOBAL STYLES
+   ==================================== */
+
+/* Estilos para inputs de texto */
+.p-inputtext {
+  background: #ffffff !important;
+  color: #333333 !important;
+}
+
+.p-inputtext::placeholder {
+  color: #9ca3af !important;
+}
+
+.p-inputtext:enabled:focus {
+  border-color: #FF781D !important;
+  box-shadow: 0 0 0 3px rgba(255, 120, 29, 0.1) !important;
+  outline: none !important;
+}
+
+/* Estilos para Select/Dropdown */
+.p-select {
+  background: #ffffff !important;
+}
+
+.p-select .p-select-label {
+  color: #333333 !important;
+}
+
+.p-select-option {
+  color: #333333 !important;
+  background: #ffffff !important;
+}
+
+.p-select:not(.p-disabled):hover {
+  border-color: #d1d5db !important;
+}
+
+.p-select:not(.p-disabled).p-focus {
+  border-color: #FF781D !important;
+  box-shadow: 0 0 0 3px rgba(255, 120, 29, 0.1) !important;
+  outline: none !important;
+}
+
+.p-select-overlay {
+  background: #ffffff !important;
+}
+
+.p-select-option:not(.p-select-option-selected):not(.p-disabled).p-focus {
+  background: rgba(255, 120, 29, 0.1) !important;
+}
+
+.p-select-option.p-select-option-selected {
+  background: rgba(255, 120, 29, 0.2) !important;
+  color: #FF781D !important;
+}
+
+/* Estilos para DatePicker */
+.p-datepicker {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.p-datepicker input {
+  background: #ffffff !important;
+  color: #333333 !important;
+}
+
+.p-datepicker input:enabled:focus {
+  border-color: #FF781D !important;
+  box-shadow: 0 0 0 3px rgba(255, 120, 29, 0.1) !important;
+  outline: none !important;
+}
+
+/* Panel del DatePicker */
+.p-datepicker-panel {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.p-datepicker-header {
+  background: #ffffff !important;
+  color: #333333 !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+.p-datepicker-title {
+  color: #333333 !important;
+}
+
+.p-datepicker-select-month,
+.p-datepicker-select-year {
+  color: #333333 !important;
+  background: #ffffff !important;
+}
+
+.p-datepicker-prev,
+.p-datepicker-next {
+  color: #6b7280 !important;
+}
+
+.p-datepicker-prev:hover,
+.p-datepicker-next:hover {
+  background: rgba(255, 120, 29, 0.1) !important;
+  color: #FF781D !important;
+}
+
+/* Tabla del calendario */
+.p-datepicker-calendar {
+  background: #ffffff !important;
+}
+
+.p-datepicker-calendar thead tr th {
+  color: #6b7280 !important;
+  background: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.p-datepicker-weekday-cell {
+  color: #333333 !important;
+}
+
+.p-datepicker-weekday {
+  color: #6b7280 !important;
+}
+
+/* Vista de meses */
+.p-datepicker-month-view {
+  background: #ffffff !important;
+}
+
+.p-datepicker-month {
+  color: #333333 !important;
+  background: transparent !important;
+}
+
+.p-datepicker-month:hover {
+  background: rgba(255, 120, 29, 0.1) !important;
+  color: #FF781D !important;
+}
+
+.p-datepicker-month.p-datepicker-month-selected {
+  background: #FF781D !important;
+  color: #ffffff !important;
+}
+
+/* Vista de años */
+.p-datepicker-year-view {
+  background: #ffffff !important;
+}
+
+.p-datepicker-year {
+  color: #333333 !important;
+  background: transparent !important;
+}
+
+.p-datepicker-year:hover {
+  background: rgba(255, 120, 29, 0.1) !important;
+  color: #FF781D !important;
+}
+
+.p-datepicker-year.p-datepicker-year-selected {
+  background: #FF781D !important;
+  color: #ffffff !important;
+}
+
+.p-datepicker-calendar tbody tr td {
+  background: #ffffff !important;
+}
+
+.p-datepicker-calendar tbody tr td > span {
+  color: #333333 !important;
+  background: transparent !important;
+  border-radius: 6px !important;
+}
+
+.p-datepicker-calendar tbody tr td > span:hover {
+  background: rgba(255, 120, 29, 0.1) !important;
+  color: #FF781D !important;
+}
+
+.p-datepicker-calendar tbody tr td.p-datepicker-today > span {
+  background: rgba(255, 120, 29, 0.15) !important;
+  color: #FF781D !important;
+  font-weight: 600 !important;
+}
+
+.p-datepicker-calendar tbody tr td > span.p-datepicker-day-selected {
+  background: #FF781D !important;
+  color: #ffffff !important;
+}
+
+.p-datepicker-calendar tbody tr td.p-datepicker-other-month > span {
+  color: #9ca3af !important;
+}
+
+/* Estilos para AutoComplete */
+.p-autocomplete {
+  background: #ffffff !important;
+}
+
+.p-autocomplete input {
+  background: #ffffff !important;
+  color: #333333 !important;
+}
+
+.p-autocomplete input::placeholder {
+  color: #9ca3af !important;
+}
+
+.p-autocomplete input:enabled:focus {
+  border-color: #FF781D !important;
+  box-shadow: 0 0 0 3px rgba(255, 120, 29, 0.1) !important;
+  outline: none !important;
+}
+
+.p-autocomplete-overlay {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  max-height: 200px;
+}
+
+.p-autocomplete-list {
+  background: #ffffff !important;
+}
+
+.p-autocomplete-option {
+  color: #333333 !important;
+  background: #ffffff !important;
+}
+
+.p-autocomplete-option:not(.p-disabled).p-focus {
+  background: rgba(255, 120, 29, 0.1) !important;
+  color: #FF781D !important;
+}
+
+.p-autocomplete-option:not(.p-disabled):hover {
+  background: rgba(255, 120, 29, 0.1) !important;
+  color: #FF781D !important;
+}
+
+/* Estilos para InputMask */
+.p-inputmask {
+  background: #ffffff !important;
+  color: #333333 !important;
+}
+
+.p-inputmask::placeholder {
+  color: #9ca3af !important;
+}
+
+.p-inputmask:enabled:focus {
+  border-color: #FF781D !important;
+  box-shadow: 0 0 0 3px rgba(255, 120, 29, 0.1) !important;
+  outline: none !important;
+}
+
+/* Estilos para botones PrimeNG */
+.p-button {
+  background: linear-gradient(135deg, #FF781D 0%, #F2AC58 100%) !important;
+  border: none !important;
+}
+
+.p-button:enabled:hover {
+  opacity: 0.9;
+}
+
+.p-button-text.p-button-secondary {
+  color: #ffffff !important;
+}
+
+/* Select overlay max height */
+.p-select-overlay {
+  max-height: 300px;
+}
+
+/* Ajustes para mobile - previene zoom en iOS */
+@media (max-width: 768px) {
+  .p-datepicker,
+  .p-select,
+  .p-autocomplete,
+  .p-inputtext,
+  .p-inputmask {
+    font-size: 16px;
+  }
+
+  .p-datepicker .p-inputtext,
+  .p-select .p-select-label,
+  .p-autocomplete .p-autocomplete-input {
+    font-size: 16px;
+  }
+}
