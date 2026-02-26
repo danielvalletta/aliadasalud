@@ -2,3 +2,8 @@
   base = "aliadasalud"
   command = "npm run build"
   publish = "/dist/aliadasalud/browser"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -34,6 +34,12 @@ export const routes: Routes = [
     canActivate: [authGuard, profileCompleteGuard]
   },
   {
+    path: 'video-call/:channelName',
+    loadComponent: () =>
+      import('./features/video-call/video-call.component').then(m => m.VideoCallComponent),
+    canActivate: [authGuard, profileCompleteGuard]
+  },
+  {
     path: '**',
     redirectTo: 'auth/login'
   }
