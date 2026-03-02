@@ -68,35 +68,42 @@ export class AgoraService {
   async fetchToken(channelName: string, uid: number): Promise<string | null> {
     // En desarrollo: usar token temporal si esta configurado en environment
     if (!environment.production && (environment as any).agoraDevToken) {
+      console.log('[Agora] Usando token de desarrollo');
       return (environment as any).agoraDevToken;
     }
 
     // En produccion: obtener token desde Supabase Edge Function
+    console.log('[Agora] Solicitando token a Edge Function...');
     try {
       const { data: sessionData } = await this.supabase.client.auth.getSession();
-      const token = sessionData.session?.access_token;
+      const accessToken = sessionData.session?.access_token;
+      console.log('[Agora] Session token existe:', !!accessToken);
 
-      const response = await fetch(
-        `${environment.supabaseUrl}/functions/v1/agora-token`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ channelName, uid }),
-        }
-      );
+      const url = `${environment.supabaseUrl}/functions/v1/agora-token`;
+      console.log('[Agora] Llamando a:', url);
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ channelName, uid }),
+      });
+
+      console.log('[Agora] Response status:', response.status);
 
       if (!response.ok) {
-        console.error('Error al obtener token de Agora');
+        const errorBody = await response.text();
+        console.error('[Agora] Error response:', errorBody);
         return null;
       }
 
       const data = await response.json();
+      console.log('[Agora] Token obtenido:', data.token ? 'SI' : 'NO');
       return data.token;
     } catch (error) {
-      console.error('Error al obtener token:', error);
+      console.error('[Agora] Error al obtener token:', error);
       return null;
     }
   }
