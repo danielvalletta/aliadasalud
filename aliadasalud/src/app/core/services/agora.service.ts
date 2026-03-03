@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, NgZone, signal } from '@angular/core';
 import AgoraRTC, {
   IAgoraRTCClient,
   IAgoraRTCRemoteUser,
@@ -29,6 +29,8 @@ export class AgoraService {
     this.remoteVideoEl = el;
   }
 
+  private ngZone = inject(NgZone);
+
   constructor(private supabase: SupabaseService) {
     this.client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp9' });
     this.setupEventListeners();
@@ -39,29 +41,29 @@ export class AgoraService {
       await this.client.subscribe(user, mediaType);
 
       if (mediaType === 'video') {
-        this.remoteUser.set(user);
-        // Reproducir video directamente sin depender de signals/effects
+        // Reproducir video directamente en el DOM
         if (this.remoteVideoEl && user.videoTrack) {
           user.videoTrack.play(this.remoteVideoEl);
         }
+        // Actualizar signal dentro de la zona de Angular para que el template reaccione
+        this.ngZone.run(() => this.remoteUser.set(user));
       } else if (mediaType === 'audio') {
-        // Reproducir audio directamente
         user.audioTrack?.play();
       }
     });
 
     this.client.on('user-unpublished', (user, mediaType) => {
       if (mediaType === 'video') {
-        this.remoteUser.set({ ...user } as IAgoraRTCRemoteUser);
+        this.ngZone.run(() => this.remoteUser.set({ ...user } as IAgoraRTCRemoteUser));
       }
     });
 
     this.client.on('user-left', () => {
-      this.remoteUser.set(null);
+      this.ngZone.run(() => this.remoteUser.set(null));
     });
 
     this.client.on('connection-state-change', (curState) => {
-      this.connectionState.set(curState as any);
+      this.ngZone.run(() => this.connectionState.set(curState as any));
     });
   }
 
